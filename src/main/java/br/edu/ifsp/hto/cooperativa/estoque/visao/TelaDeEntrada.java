@@ -1,15 +1,19 @@
 package br.edu.ifsp.hto.cooperativa.estoque.visao;
 
+import br.edu.ifsp.hto.cooperativa.estoque.controle.controleEstoque;
+import br.edu.ifsp.hto.cooperativa.estoque.modelo.vo.Armazem;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 public class TelaDeEntrada {
 
     public static void main(String[] args) {
+        controleEstoque controle = controleEstoque.getInstance();
 
         final JFrame janela = new JFrame("Entrada no Estoque");
         janela.setSize(700, 500); 
@@ -56,8 +60,11 @@ public class TelaDeEntrada {
         gbc.gridy = 1;
         painelCentral.add(lblArmazem, gbc);
 
-        String[] armazens = {"Armazém Principal", "Armazém Secundário"};
-        JComboBox<String> comboArmazem = new JComboBox<>(armazens);
+        List<Armazem> armazens = controle.listarArmazens();
+        JComboBox<Armazem> comboArmazem = new JComboBox<>(
+            armazens.toArray(Armazem[]::new)
+        );
+        
         gbc.gridx = 1;
         painelCentral.add(comboArmazem, gbc);
 
@@ -86,6 +93,12 @@ public class TelaDeEntrada {
         JButton btnSalvar = new JButton("Salvar");
         JButton btnExcluir = new JButton("Excluir");
         
+        btnSalvar.addActionListener(e -> {
+            Armazem selecionado = (Armazem) comboArmazem.getSelectedItem();
+            if (selecionado != null) {
+                System.out.println(selecionado.getId());
+            }
+        });
 
         btnSalvar.setBackground(new Color(50, 50, 50)); 
         btnSalvar.setForeground(Color.WHITE);

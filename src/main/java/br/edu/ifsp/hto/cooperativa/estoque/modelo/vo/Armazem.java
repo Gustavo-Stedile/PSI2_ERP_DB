@@ -35,4 +35,9 @@ public class Armazem{
     public void setEndereco(int endereco_id) {
         this.endereco_id = endereco_id;
     }
+    
+    @Override
+    public String toString() {
+        return this.getNome();
+    }
 }

@@ -79,6 +79,15 @@ public class controleEstoque {
     }
     
     /**
+     * Lista todos os armazens cadastrados.
+     *
+     * @return lista de {@code Armazem}
+     */
+    public List<Armazem> listarArmazens() {
+        return armazemDAO.listarTodos();
+    }
+    
+    /**
      * Lista todos os produtos cadastrados.
      *
      * @return lista de {@code Produto}

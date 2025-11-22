@@ -1,5 +1,6 @@
 package br.edu.ifsp.hto.cooperativa.estoque.modelo.dao;
 
+import br.edu.ifsp.hto.cooperativa.ConnectionFactory;
 import br.edu.ifsp.hto.cooperativa.estoque.modelo.vo.Armazem;
 import java.sql.*;
 import java.util.ArrayList;
