@@ -1,63 +1,112 @@
 package br.edu.ifsp.hto.cooperativa.producao.modelo.vo;
 
-import java.math.BigDecimal;
+import java.util.Date;
 
 public class OrdemProducaoVO {
 
-    private long id;
-    private long planoId;
-    private int quantidade;
-    private BigDecimal kgTotal;
+    private Long id;
+    private Integer planoId;
+    private Long especieId;
+    private Long talhaoId;
+    private String nomePlano;
+    private String descricao;
+    private Date dataInicio;
+    private Date dataFim;
+    private String observacoes;
+    private Double areaCultivo;
+    private Date dataExecucao;
+    private Double quantidadeKg;
+    private String status;
 
-    public OrdemProducaoVO() {
-    }
-
-    public OrdemProducaoVO(long id, long planoId, int quantidade, BigDecimal kgTotal) {
-        this.id = id;
-        this.planoId = planoId;
-        this.quantidade = quantidade;
-        this.kgTotal = kgTotal;
-    }
-
-    public long getId() {
+    // Getters e Setters
+    public Long getId() {
         return id;
     }
-
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getPlanoId() {
+    public Integer getPlanoId() {
         return planoId;
     }
-
-    public void setPlanoId(long planoId) {
+    public void setPlanoId(Integer planoId) {
         this.planoId = planoId;
     }
 
-    public int getQuantidade() {
-        return quantidade;
+    public Long getEspecieId() {
+        return especieId;
+    }
+    public void setEspecieId(Long especieId) {
+        this.especieId = especieId;
     }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
+    public Long getTalhaoId() {
+        return talhaoId;
+    }
+    public void setTalhaoId(Long talhaoId) {
+        this.talhaoId = talhaoId;
     }
 
-    public BigDecimal getKgTotal() {
-        return kgTotal;
+    public String getNomePlano() {
+        return nomePlano;
+    }
+    public void setNomePlano(String nomePlano) {
+        this.nomePlano = nomePlano;
     }
 
-    public void setKgTotal(BigDecimal kgTotal) {
-        this.kgTotal = kgTotal;
+    public String getDescricao() {
+        return descricao;
+    }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
-    @Override
-    public String toString() {
-        return "OrdemProducaoVO{" +
-                "id=" + id +
-                ", planoId=" + planoId +
-                ", quantidade=" + quantidade +
-                ", kgTotal=" + kgTotal +
-                '}';
+    public Date getDataInicio() {
+        return dataInicio;
+    }
+    public void setDataInicio(Date dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public Date getDataFim() {
+        return dataFim;
+    }
+    public void setDataFim(Date dataFim) {
+        this.dataFim = dataFim;
+    }
+
+    public String getObservacoes() {
+        return observacoes;
+    }
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
+    }
+
+    public Double getAreaCultivo() {
+        return areaCultivo; 
+    }
+    public void setAreaCultivo(Double areaCultivo) {
+        this.areaCultivo = areaCultivo;
+    }
+
+    public Date getDataExecucao() {
+        return dataExecucao;
+    }
+    public void setDataExecucao(Date dataExecucao) {
+        this.dataExecucao = dataExecucao;
+    }
+
+    public Double getQuantidadeKg() {
+        return quantidadeKg;
+    }
+    public void setQuantidadeKg(Double quantidadeKg) {
+        this.quantidadeKg = quantidadeKg;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

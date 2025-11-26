@@ -1,86 +1,138 @@
 package br.edu.ifsp.hto.cooperativa.producao.modelo.dao;
 
 import br.edu.ifsp.hto.cooperativa.producao.modelo.vo.OrdemProducaoVO;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrdemProducaoDAO {
 
-    private Connection conexao;
+    private Connection conn;
 
-    public OrdemProducaoDAO(Connection conexao) {
-        this.conexao = conexao;
+    // construtor correto
+    public OrdemProducaoDAO(Connection conn) {
+        this.conn = conn;
     }
-
-    // Inserir nova ordem de produção
+    
+    // CREATE
     public void inserir(OrdemProducaoVO vo) throws SQLException {
-        String sql = "INSERT INTO ordem_producao (Plano_id, quantidade, kg_total) VALUES (?, ?, ?)";
-        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setLong(1, vo.getPlanoId());
-            stmt.setInt(2, vo.getQuantidade());
-            stmt.setBigDecimal(3, vo.getKgTotal());
-            stmt.executeUpdate();
-        }
+        String sql = "INSERT INTO ordem_producao (" +
+                "plano_id, especie_id, talhao_id, nome_plano, descricao, data_inicio, data_fim, " +
+                "observacoes, area_cultivo, data_execucao, quantidade_kg, status) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+
+        ps.setObject(1, vo.getPlanoId());
+        ps.setObject(2, vo.getEspecieId());
+        ps.setObject(3, vo.getTalhaoId());
+        ps.setString(4, vo.getNomePlano());
+        ps.setString(5, vo.getDescricao());
+        ps.setTimestamp(6, vo.getDataInicio() == null ? null : new Timestamp(vo.getDataInicio().getTime()));
+        ps.setTimestamp(7, vo.getDataFim() == null ? null : new Timestamp(vo.getDataFim().getTime()));
+        ps.setString(8, vo.getObservacoes());
+        ps.setObject(9, vo.getAreaCultivo());
+        ps.setDate(10, vo.getDataExecucao() == null ? null : new Date(vo.getDataExecucao().getTime()));
+        ps.setObject(11, vo.getQuantidadeKg());
+        ps.setString(12, vo.getStatus());
+
+        ps.executeUpdate();
+        ps.close();
     }
 
-    // Atualizar uma ordem existente
-    public void atualizar(OrdemProducaoVO vo) throws SQLException {
-        String sql = "UPDATE ordem_producao SET Plano_id = ?, quantidade = ?, kg_total = ? WHERE id = ?";
-        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setLong(1, vo.getPlanoId());
-            stmt.setInt(2, vo.getQuantidade());
-            stmt.setBigDecimal(3, vo.getKgTotal());
-            stmt.setLong(4, vo.getId());
-            stmt.executeUpdate();
+    // READ (by id)
+    public OrdemProducaoVO buscarPorId(Long id) throws SQLException {
+        String sql = "SELECT * FROM ordem_producao WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setLong(1, id);
+
+        ResultSet rs = ps.executeQuery();
+
+        OrdemProducaoVO vo = null;
+
+        if (rs.next()) {
+            vo = converter(rs);
         }
+
+        rs.close();
+        ps.close();
+
+        return vo;
     }
 
-    // Buscar por ID
-    public OrdemProducaoVO buscarPorId(long id) throws SQLException {
-        String sql = "SELECT id, Plano_id, quantidade, kg_total FROM ordem_producao WHERE id = ?";
-        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setLong(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new OrdemProducaoVO(
-                            rs.getLong("id"),
-                            rs.getLong("Plano_id"),
-                            rs.getInt("quantidade"),
-                            rs.getBigDecimal("kg_total")
-                    );
-                }
-            }
-        }
-        return null;
-    }
+    // READ ALL
+    public List<OrdemProducaoVO> listarTodos() throws SQLException {
+        String sql = "SELECT * FROM ordem_producao ORDER BY id";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
 
-    // Listar todas as ordens
-    public List<OrdemProducaoVO> listarTodas() throws SQLException {
         List<OrdemProducaoVO> lista = new ArrayList<>();
-        String sql = "SELECT id, Plano_id, quantidade, kg_total FROM ordem_producao";
-        try (Statement stmt = conexao.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
 
-            while (rs.next()) {
-                OrdemProducaoVO vo = new OrdemProducaoVO(
-                        rs.getLong("id"),
-                        rs.getLong("Plano_id"),
-                        rs.getInt("quantidade"),
-                        rs.getBigDecimal("kg_total")
-                );
-                lista.add(vo);
-            }
+        while (rs.next()) {
+            lista.add(converter(rs));
         }
+
+        rs.close();
+        ps.close();
+
         return lista;
     }
 
-    // Excluir uma ordem de produção
-    public void deletar(long id) throws SQLException {
+    // UPDATE
+    public void atualizar(OrdemProducaoVO vo) throws SQLException {
+        String sql = "UPDATE ordem_producao SET " +
+                "plano_id=?, especie_id=?, talhao_id=?, nome_plano=?, descricao=?, data_inicio=?, data_fim=?, " +
+                "observacoes=?, area_cultivo=?, data_execucao=?, quantidade_kg=?, status=? " +
+                "WHERE id=?";
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+
+        ps.setObject(1, vo.getPlanoId());
+        ps.setObject(2, vo.getEspecieId());
+        ps.setObject(3, vo.getTalhaoId());
+        ps.setString(4, vo.getNomePlano());
+        ps.setString(5, vo.getDescricao());
+        ps.setTimestamp(6, vo.getDataInicio() == null ? null : new Timestamp(vo.getDataInicio().getTime()));
+        ps.setTimestamp(7, vo.getDataFim() == null ? null : new Timestamp(vo.getDataFim().getTime()));
+        ps.setString(8, vo.getObservacoes());
+        ps.setObject(9, vo.getAreaCultivo());
+        ps.setDate(10, vo.getDataExecucao() == null ? null : new Date(vo.getDataExecucao().getTime()));
+        ps.setObject(11, vo.getQuantidadeKg());
+        ps.setString(12, vo.getStatus());
+        ps.setLong(13, vo.getId());
+
+        ps.executeUpdate();
+        ps.close();
+    }
+
+    // DELETE
+    public void deletar(Long id) throws SQLException {
         String sql = "DELETE FROM ordem_producao WHERE id = ?";
-        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setLong(1, id);
-            stmt.executeUpdate();
-        }
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setLong(1, id);
+        ps.executeUpdate();
+        ps.close();
+    }
+
+    // Conversão ResultSet → VO
+    private OrdemProducaoVO converter(ResultSet rs) throws SQLException {
+        OrdemProducaoVO vo = new OrdemProducaoVO();
+
+        vo.setId(rs.getLong("id"));
+        vo.setPlanoId((Integer) rs.getObject("plano_id"));
+        vo.setEspecieId((Long) rs.getObject("especie_id"));
+        vo.setTalhaoId((Long) rs.getObject("talhao_id"));
+        vo.setNomePlano(rs.getString("nome_plano"));
+        vo.setDescricao(rs.getString("descricao"));
+        vo.setDataInicio(rs.getTimestamp("data_inicio"));
+        vo.setDataFim(rs.getTimestamp("data_fim"));
+        vo.setObservacoes(rs.getString("observacoes"));
+        vo.setAreaCultivo(rs.getDouble("area_cultivo"));
+        vo.setDataExecucao(rs.getDate("data_execucao"));
+        vo.setQuantidadeKg(rs.getDouble("quantidade_kg"));
+        vo.setStatus(rs.getString("status"));
+
+        return vo;
     }
 }
