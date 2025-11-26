@@ -30,8 +30,6 @@ public class MenuLateral extends JPanel {
         adicionarBotao("Início", navegador::abrirInicio);
         
         adicionarBotao("Áreas", navegador::abrirAreas);
-        adicionarBotao("Talhões", navegador::abrirTalhoes);
-        adicionarBotao("Planos", navegador::abrirPlanos);
         adicionarBotao("Materiais", navegador::abrirMateriais);
     }
 
