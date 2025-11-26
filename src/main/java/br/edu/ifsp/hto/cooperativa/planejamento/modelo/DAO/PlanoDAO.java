@@ -40,6 +40,34 @@ public class PlanoDAO {
         }
     }
 
+    public int qtdPlanoAssociado(int associadoId) {
+        try {
+            Connection conn = ConnectionFactory.getConnection();
+
+            String sql = "SELECT COUNT(plano.id) as total_planos FROM associado " +
+                "INNER JOIN area ON associado.id = area.associado_id " + 
+                "INNER JOIN talhao ON area.id = talhao.area_id " + 
+                "INNER JOIN plano ON talhao.id = plano.talhao_id " +
+                "WHERE associado.id = ?";
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, associadoId);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            int totalPlanos = rs.getInt("total_planos");
+
+            rs.close();
+            stmt.close();
+            conn.close();
+            
+            return totalPlanos;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     /**
      * Lista todos os planos presentes no banco de dados
      * 

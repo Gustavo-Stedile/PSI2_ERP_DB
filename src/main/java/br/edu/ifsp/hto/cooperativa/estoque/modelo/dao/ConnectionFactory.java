@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class ConnectionFactory {
 
     // Dados de conexão (EXEMPLO)
-    private static final String URL = "jdbc:mysql://localhost:3306/seubanco"; 
-    private static final String USUARIO = "root";
-    private static final String SENHA = "senha";
+    private static final String URL = "jdbc:postgresql://localhost:5432/teste"; 
+    private static final String USUARIO = "postgres";
+    private static final String SENHA = "root";
 
     // Método que retorna uma conexão.
     public static Connection getConnection() {

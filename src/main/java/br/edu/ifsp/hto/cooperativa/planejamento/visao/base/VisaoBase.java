@@ -1,18 +1,18 @@
 package br.edu.ifsp.hto.cooperativa.planejamento.visao.base;
 
 import javax.swing.*;
+import java.awt.*;
 
 import br.edu.ifsp.hto.cooperativa.planejamento.visao.componentes.Cabecalho;
 import br.edu.ifsp.hto.cooperativa.planejamento.visao.componentes.MenuLateral;
 import br.edu.ifsp.hto.cooperativa.planejamento.visao.estilo.Tema;
 import br.edu.ifsp.hto.cooperativa.planejamento.visao.telas.VisaoAreas;
-
-import java.awt.*;
+import br.edu.ifsp.hto.cooperativa.planejamento.visao.telas.VisaoHome;
 
 public abstract class VisaoBase extends JFrame implements NavegadorTelas {
 
     public VisaoBase(String tituloPagina) {
-        super("Planejamento de Produção"); // Título da Janela do SO
+        super("Planejamento de Produção"); // Título da Janela
         configurarJanela();
         montarLayoutBase(tituloPagina);
     }
@@ -50,20 +50,29 @@ public abstract class VisaoBase extends JFrame implements NavegadorTelas {
     // Cada tela filha deve implementar isso para desenhar seu miolo
     protected abstract JPanel getPainelConteudo();
 
-    // --- Navegação (Pode ser melhorada futuramente) ---
+    // --- Navegação Otimizada ---
+    
     @Override
-    public void abrirAreas() {
-        trocarTela(new VisaoAreas());
+    public void abrirInicio() {
+        // Verifica se JÁ ESTOU na Home para não recarregar à toa
+        if (!(this instanceof VisaoHome)) {
+            this.dispose();
+            new VisaoHome().setVisible(true);
+        }
     }
 
-    // Implemente as outras...
+    @Override
+    public void abrirAreas() {
+        // Verifica se JÁ ESTOU em Áreas
+        if (!(this instanceof VisaoAreas)) {
+            this.dispose();
+            new VisaoAreas().setVisible(true);
+        }
+    }
+
+    // --- Outras navegações (Futuro) ---
     @Override public void abrirMateriais() {}
     @Override public void abrirTalhoes() {}
     @Override public void abrirPlanos() {}
     @Override public void abrirAtividades() {}
-
-    private void trocarTela(JFrame novaTela) {
-        this.dispose();
-        novaTela.setVisible(true);
-    }
 }

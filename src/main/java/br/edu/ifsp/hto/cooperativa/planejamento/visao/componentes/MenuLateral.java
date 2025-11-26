@@ -26,7 +26,9 @@ public class MenuLateral extends JPanel {
     }
 
     private void montarBotoes() {
-        adicionarBotao("Início", () -> System.out.println("Já no início"));
+        // --- ALTERAÇÃO AQUI: Chama o método do navegador ---
+        adicionarBotao("Início", navegador::abrirInicio);
+        
         adicionarBotao("Áreas", navegador::abrirAreas);
         adicionarBotao("Talhões", navegador::abrirTalhoes);
         adicionarBotao("Planos", navegador::abrirPlanos);
