@@ -82,7 +82,7 @@ public class TelaLogin extends JFrame {
             if (usuarioLogado != null)
             {
                 // Altere aqui para sua tela para teste antes de integrarmos tudo
-                new br.edu.ifsp.hto.cooperativa.notafiscal.visao.TelaPrincipal().setVisible(true);
+                new br.edu.ifsp.hto.cooperativa.planejamento.visao.TelaPrincipal().setVisible(true);
                 dispose(); // Fecha a tela de login
             }
         }
